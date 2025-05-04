@@ -1,72 +1,95 @@
-import React, { FocusEvent, useState } from "react";
-import Card from "@mui/joy/Card";
 import Input from "@mui/joy/Input";
 import Select from "@mui/joy/Select";
 import Option from "@mui/joy/Option";
 import Switch from "@mui/joy/Switch";
-import { CardContent } from "@mui/joy";
+import { IconButton, Stack } from "@mui/joy";
+import CancelIcon from "@mui/icons-material/Cancel";
+import { PlayerDef } from "../PlayerList/PlayerList";
+
+export const ranks = ["7", "6", "5", "4", "3", "2", "1"];
 
 function Player({
+  id,
   name,
   rank,
   attending,
-}: {
-  name: string;
-  rank: string | null;
-  attending: boolean;
+  handleChange,
+  handleRemove,
+}: PlayerDef & {
+  handleChange: (id: string, change: Partial<PlayerDef>) => void;
+  handleRemove: (id: string) => void;
 }) {
   return (
-    <Card
-      size="sm"
-      variant="soft"
+    <Stack
+      direction="row"
+      spacing={1}
       sx={{
-        width: 400,
+        width: 380,
+        position: "relative",
       }}
     >
-      <CardContent orientation="horizontal">
-        <Input
-          placeholder="Player Name"
-          variant="outlined"
-          size="sm"
-          color="neutral"
-          value={name}
-          onChange={(e) => {}}
-          sx={{
-            flexGrow: 1,
-            maxWidth: 300,
-          }}
-        />
-        <Select
-          placeholder="Rank"
-          name="rank"
-          variant="outlined"
-          size="sm"
-          sx={{ minWidth: 100 }}
-          value={rank}
-          onChange={(_e, newVal) => {}}
-        >
-          <Option value="1">1</Option>
-          <Option value="2">2</Option>
-          <Option value="3">3</Option>
-          <Option value="4">4</Option>
-          <Option value="5">5</Option>
-        </Select>
-        <Switch
-          checked={attending}
-          onChange={(e) => {}}
-          color={attending ? "primary" : "neutral"}
-          variant={attending ? "solid" : "outlined"}
-          endDecorator={attending ? "In" : "Out"}
-          slotProps={{
-            endDecorator: {
-              sx: {
-                minWidth: 24,
-              },
+      <Input
+        placeholder="Player Name"
+        variant="outlined"
+        size="sm"
+        color="neutral"
+        value={name}
+        onChange={(e) => {
+          handleChange(id, {
+            name: e.target.value,
+          });
+        }}
+        sx={{
+          flexGrow: 1,
+          maxWidth: 300,
+        }}
+      />
+      <Select
+        placeholder="Rank"
+        name="rank"
+        variant="outlined"
+        size="sm"
+        sx={{ minWidth: 100 }}
+        value={rank}
+        onChange={(_, newRank) => {
+          handleChange(id, {
+            rank: newRank,
+          });
+        }}
+      >
+        {ranks.map((r) => (
+          <Option value={r}>{r}</Option>
+        ))}
+      </Select>
+      <Switch
+        checked={attending}
+        onChange={(e) => {
+          handleChange(id, {
+            attending: e.target.checked,
+          });
+        }}
+        color={attending ? "primary" : "neutral"}
+        variant={attending ? "solid" : "outlined"}
+        endDecorator={attending ? "In" : "Out"}
+        slotProps={{
+          endDecorator: {
+            sx: {
+              minWidth: 24,
             },
-          }}
-        />
-      </CardContent>
-    </Card>
+          },
+        }}
+      />
+      <IconButton
+        size="sm"
+        color="danger"
+        variant="plain"
+        onClick={() => {
+          handleRemove(id);
+        }}
+      >
+        <CancelIcon />
+      </IconButton>
+    </Stack>
   );
 }
 
