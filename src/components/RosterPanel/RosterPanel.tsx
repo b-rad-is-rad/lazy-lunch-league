@@ -1,9 +1,8 @@
-import { CircularProgress, TabPanel } from "@mui/joy";
+import { CircularProgress } from "@mui/joy";
 import PlayerList, { PlayerDef } from "../PlayerList/PlayerList";
 import { useEffect, useState } from "react";
 import SportsHockeyIcon from "@mui/icons-material/SportsHockey";
 import { useDebounce } from "use-debounce";
-import { azAZ } from "@mui/material/locale";
 
 interface Roster {
   players: PlayerDef[];
@@ -58,7 +57,7 @@ export const RosterPanel = ({
         throw new Error(`HTTP error! status: ${resp.status}`);
       }
     };
-    
+
     if (!loading) {
       updateRoster();
     }

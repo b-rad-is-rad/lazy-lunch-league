@@ -1,5 +1,5 @@
 import { useState } from "react";
-import PlayerList, { PlayerDef } from "./components/PlayerList/PlayerList";
+import { PlayerDef } from "./components/PlayerList/PlayerList";
 import { Tab, TabList, Tabs, TabPanel, Box } from "@mui/joy";
 import { RosterPanel } from "./components/RosterPanel/RosterPanel";
 

@@ -3,8 +3,6 @@ import { v4 as uuidv4 } from "uuid";
 import Player from "../Player/Player";
 import { jsPDF } from "jspdf";
 import { autoTable } from "jspdf-autotable";
-import { useDebounce } from "use-debounce";
-import { useEffect } from "react";
 
 export const shuffle = (arr: any) => {
   let currentIndex = arr.length;
