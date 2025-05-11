@@ -32,7 +32,12 @@ export const RosterPanel = ({
       }
 
       const data = (await resp.json()) as Roster;
-      data.players.sort((a,b) =>  a.name.localeCompare(b.name))
+      data.players.sort((a,b) => { 
+        if(a.name.split(' ')[0] < b.name.split(' ')[0]) { return -1; }
+        if(a.name.split(' ')[0] > b.name.split(' ')[0]) { return 1; }
+        return 0;
+      })
+
       setPlayers(data.players)
       setLoading(false);
     };
