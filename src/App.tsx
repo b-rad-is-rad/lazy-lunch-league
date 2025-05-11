@@ -8,10 +8,6 @@ function App() {
   const [thursdayRoster, setThursdayRoster] = useState<PlayerDef[]>([]);
   const [fridayRoster, setFridayRoster] = useState<PlayerDef[]>([]);
 
-  // TODO: Hook to push debounced updates to DDB (call POST lambda)
-  // TODO: Make sure each tab works independently
-  // TODO: Maybe do some sort of password so the site can't be easily f'ed with??
-
   return (
     <>
       <Tabs aria-label="Basic tabs" defaultValue={0}>
