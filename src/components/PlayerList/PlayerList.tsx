@@ -3,6 +3,8 @@ import { v4 as uuidv4 } from "uuid";
 import Player from "../Player/Player";
 import { jsPDF } from "jspdf";
 import { autoTable } from "jspdf-autotable";
+import { useDebounce } from "use-debounce";
+import { useEffect } from "react";
 
 export const shuffle = (arr: any) => {
   let currentIndex = arr.length;
@@ -26,7 +28,7 @@ export const isOdd = (n: number) => n % 2 !== 0;
 export interface PlayerDef {
   id: string;
   name: string;
-  rank: string | null;
+  rank: number | null;
   attending: boolean;
 }
 
@@ -142,7 +144,7 @@ export default function PlayerList({
       {
         id: uuidv4(),
         name: "",
-        rank: "3",
+        rank: null,
         attending: true,
       },
     ]);

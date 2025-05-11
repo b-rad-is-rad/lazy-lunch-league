@@ -1,0 +1,74 @@
+import { CircularProgress, TabPanel } from "@mui/joy";
+import PlayerList, { PlayerDef } from "../PlayerList/PlayerList";
+import { useEffect, useState } from "react";
+import SportsHockeyIcon from "@mui/icons-material/SportsHockey";
+import { useDebounce } from "use-debounce";
+import { azAZ } from "@mui/material/locale";
+
+interface Roster {
+  players: PlayerDef[];
+}
+
+export const RosterPanel = ({
+  day,
+  players,
+  setPlayers,
+}: {
+  day: string;
+  players: PlayerDef[];
+  setPlayers: React.Dispatch<React.SetStateAction<PlayerDef[]>>;
+}) => {
+  const [loading, setLoading] = useState<boolean>(true);
+  const [debouncedPlayers] = useDebounce(players, 400);
+
+  useEffect(() => {
+    const fetchRoster = async () => {
+      const resp = await fetch(
+        `https://3n76og7xwvuca6yrhkdubpbo2m0harpp.lambda-url.us-east-1.on.aws/day/${day}`,
+      );
+
+      if (!resp.ok) {
+        console.log(resp);
+        throw new Error(`HTTP error! status: ${resp.status}`);
+      }
+
+      const data = (await resp.json()) as Roster;
+
+      setPlayers(data.players);
+      setLoading(false);
+    };
+
+    fetchRoster();
+  }, []);
+
+  useEffect(() => {
+    const updateRoster = async () => {
+      const resp = await fetch(
+        `https://3n76og7xwvuca6yrhkdubpbo2m0harpp.lambda-url.us-east-1.on.aws/day/${day}`,
+        {
+          method: "POST",
+          body: JSON.stringify({
+            players: debouncedPlayers,
+          }),
+        },
+      );
+
+      if (!resp.ok) {
+        console.log(resp);
+        throw new Error(`HTTP error! status: ${resp.status}`);
+      }
+    };
+    
+    if (!loading) {
+      updateRoster();
+    }
+  }, [debouncedPlayers]);
+
+  return loading ? (
+    <CircularProgress color="primary">
+      <SportsHockeyIcon color="inherit" />
+    </CircularProgress>
+  ) : (
+    <PlayerList players={players} setPlayers={setPlayers} />
+  );
+};

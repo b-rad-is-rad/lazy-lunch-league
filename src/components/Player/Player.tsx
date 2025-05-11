@@ -50,10 +50,10 @@ function Player({
         variant="outlined"
         size="sm"
         sx={{ minWidth: 100 }}
-        value={rank}
+        value={rank?.toString()}
         onChange={(_, newRank) => {
           handleChange(id, {
-            rank: newRank,
+            rank: Number(newRank),
           });
         }}
       >
