@@ -32,8 +32,8 @@ export const RosterPanel = ({
       }
 
       const data = (await resp.json()) as Roster;
-
-      setPlayers(data.players);
+      data.players.sort((a,b) =>  a.name.localeCompare(b.name))
+      setPlayers(data.players)
       setLoading(false);
     };
 
