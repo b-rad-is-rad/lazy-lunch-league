@@ -12,10 +12,12 @@ export const RosterPanel = ({
   day,
   players,
   setPlayers,
+  setTeams,
 }: {
   day: string;
   players: PlayerDef[];
   setPlayers: React.Dispatch<React.SetStateAction<PlayerDef[]>>;
+  setTeams: React.Dispatch<React.SetStateAction<PlayerDef[][]>>;
 }) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [debouncedPlayers] = useDebounce(players, 400);
@@ -32,13 +34,17 @@ export const RosterPanel = ({
       }
 
       const data = (await resp.json()) as Roster;
-      data.players.sort((a,b) => { 
-        if(a.name.split(' ')[0] < b.name.split(' ')[0]) { return -1; }
-        if(a.name.split(' ')[0] > b.name.split(' ')[0]) { return 1; }
+      data.players.sort((a, b) => {
+        if (a.name.split(" ")[0] < b.name.split(" ")[0]) {
+          return -1;
+        }
+        if (a.name.split(" ")[0] > b.name.split(" ")[0]) {
+          return 1;
+        }
         return 0;
-      })
+      });
 
-      setPlayers(data.players)
+      setPlayers(data.players);
       setLoading(false);
     };
 
@@ -73,6 +79,6 @@ export const RosterPanel = ({
       <SportsHockeyIcon color="inherit" />
     </CircularProgress>
   ) : (
-    <PlayerList players={players} setPlayers={setPlayers} />
+    <PlayerList players={players} setPlayers={setPlayers} setTeams={setTeams} />
   );
 };

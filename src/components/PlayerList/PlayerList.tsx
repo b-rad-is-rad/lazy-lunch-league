@@ -1,8 +1,6 @@
-import { Button, List, ListItem, Stack, Typography } from "@mui/joy";
+import { Button, List, ListItem, Sheet, Stack, Typography } from "@mui/joy";
 import { v4 as uuidv4 } from "uuid";
 import Player from "../Player/Player";
-import { jsPDF } from "jspdf";
-import { autoTable } from "jspdf-autotable";
 
 export const shuffle = (arr: any) => {
   let currentIndex = arr.length;
@@ -33,9 +31,11 @@ export interface PlayerDef {
 export default function PlayerList({
   players,
   setPlayers,
+  setTeams,
 }: {
   players: PlayerDef[];
   setPlayers: React.Dispatch<React.SetStateAction<PlayerDef[]>>;
+  setTeams: React.Dispatch<React.SetStateAction<PlayerDef[][]>>;
 }) {
   const handleGenerateRandomTeams = () => {
     let t1: PlayerDef[] = [];
@@ -95,41 +95,7 @@ export default function PlayerList({
       i = j;
     }
 
-    const doc = new jsPDF();
-    const roster: string[][] = [];
-    shuffle(t1);
-    shuffle(t2);
-
-    let k = 0;
-    const bit = Math.round(Math.random());
-
-    // Randomly assign light and dark teams.
-    // Generate roster in format that jspdf-autotable expects
-    while (true) {
-      if (t1[k] === undefined && t2[k] === undefined) break;
-
-      if (!!bit) {
-        roster.push([t1[k]?.name ?? "", t2[k]?.name ?? ""]);
-      } else {
-        roster.push([t2[k]?.name ?? "", t1[k]?.name ?? ""]);
-      }
-      k++;
-    }
-
-    autoTable(doc, {
-      theme: "grid",
-      headStyles: {
-        fillColor: [230, 230, 230],
-        fontSize: 20,
-        fontStyle: "bold",
-        textColor: [0, 0, 0],
-      },
-      bodyStyles: { fontSize: 14 },
-      head: [["Dark", "Light"]],
-      body: [...roster],
-    });
-
-    doc.save("roster.pdf");
+    setTeams([t1, t2]);
   };
 
   const handleRemovePlayer = (playerId: string) => {
@@ -155,9 +121,19 @@ export default function PlayerList({
   };
 
   return (
-    <Stack
-      direction="column"
-      sx={{ maxWidth: 380, mx: "auto", mt: 4, alignItems: "center" }}
+    <Sheet
+      variant="outlined"
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        maxWidth: 375,
+        alignItems: "center",
+        borderRadius: "md",
+        p: 2,
+        height: "100%",
+        borderColor: "primary.300",
+        boxShadow: "sm",
+      }}
     >
       <Typography sx={{ mb: 1 }}>
         Players Attending: {players.filter((p) => p.attending).length}
@@ -173,6 +149,7 @@ export default function PlayerList({
         </Button>
         <Button
           variant="soft"
+          color="warning"
           size="sm"
           sx={{ border: "1px solid gray" }}
           onClick={handleGenerateRandomTeams}
@@ -197,6 +174,6 @@ export default function PlayerList({
           </ListItem>
         ))}
       </List>
-    </Stack>
+    </Sheet>
   );
 }

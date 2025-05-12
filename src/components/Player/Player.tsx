@@ -6,7 +6,7 @@ import { IconButton, Stack } from "@mui/joy";
 import CancelIcon from "@mui/icons-material/Cancel";
 import { PlayerDef } from "../PlayerList/PlayerList";
 
-export const ranks = ["7", "6", "5", "4", "3", "2", "1"];
+export const ranks = ["5", "4", "3", "2", "1"];
 
 function Player({
   id,
