@@ -13,8 +13,47 @@ import {
 import { RosterPanel } from "./components/RosterPanel/RosterPanel";
 import TeamPanel from "./components/TeamsPanel/TeamsPanel";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
+import EditDocumentIcon from '@mui/icons-material/EditDocument';
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import { download, generateCsv, mkConfig } from "export-to-csv";
+
+const renderGenerateCSVButton = (teams: PlayerDef[][]) => {
+  const genCSVHandler = () => {
+    const roster: {'Dark': string; 'Light': string}[] = [];
+    const t1 = teams[0];
+    const t2 = teams[1];
+    shuffle(t1);
+    shuffle(t2);
+
+    let k = 0;
+
+    while (true) {
+      if (t1[k] === undefined && t2[k] === undefined) break;
+      const row = {
+        Dark: t1[k]?.name ?? "",
+        Light: t2[k]?.name ?? "",
+      }
+      roster.push(row);
+      k++;
+    }
+    const csvConfig = mkConfig({ filename: 'roster', useKeysAsHeaders: true });
+    const csv = generateCsv(csvConfig)(roster);
+    download(csvConfig)(csv) 
+  }
+
+  return (
+    <Button
+      variant="soft"
+      size="sm"
+      sx={{ border: "1px solid gray", maxWidth: "200px" }}
+      startDecorator={<EditDocumentIcon />}
+      onClick={genCSVHandler}
+    >
+      Save Roster CSV
+    </Button>
+  )
+}
 
 const renderGeneratePDFButton = (teams: PlayerDef[][]) => {
   const genPDFHandler = () => {
@@ -102,7 +141,10 @@ function App() {
                     darkTeam={tuesdayTeams[0]}
                     lightTeam={tuesdayTeams[1]}
                   />
+                <Stack direction='column' spacing={1}>
                   {renderGeneratePDFButton(tuesdayTeams)}
+                  {renderGenerateCSVButton(tuesdayTeams)}
+                </Stack>
                 </Stack>
               </Grid>
             </Grid>
@@ -123,7 +165,10 @@ function App() {
                     darkTeam={thursdayTeams[0]}
                     lightTeam={thursdayTeams[1]}
                   />
-                  {renderGeneratePDFButton(thursdayTeams)}
+                  <Stack direction='column' spacing={1}>
+                    {renderGeneratePDFButton(thursdayTeams)}
+                    {renderGenerateCSVButton(thursdayTeams)}
+                  </Stack>
                 </Stack>
               </Grid>
             </Grid>
@@ -144,7 +189,10 @@ function App() {
                     darkTeam={fridayTeams[0]}
                     lightTeam={fridayTeams[1]}
                   />
-                  {renderGeneratePDFButton(fridayTeams)}
+                  <Stack direction='column' spacing={1}>
+                    {renderGeneratePDFButton(fridayTeams)}
+                    {renderGenerateCSVButton(fridayTeams)}
+                  </Stack>
                 </Stack>
               </Grid>
             </Grid>
