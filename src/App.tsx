@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { PlayerDef, shuffle } from "./components/PlayerList/PlayerList";
+import { PlayerDef } from "./components/PlayerList/PlayerList";
 import {
   Tab,
   TabList,
@@ -18,13 +18,17 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { download, generateCsv, mkConfig } from "export-to-csv";
 
+const sortTeam = (team: PlayerDef[]) => {
+  team.sort((a, b) => a.name.localeCompare(b.name))
+}
+
 const renderGenerateCSVButton = (teams: PlayerDef[][]) => {
   const genCSVHandler = () => {
     const roster: {'Dark': string; 'Light': string}[] = [];
     const t1 = teams[0];
     const t2 = teams[1];
-    shuffle(t1);
-    shuffle(t2);
+    sortTeam(t1)
+    sortTeam(t2)
 
     let k = 0;
 
@@ -61,8 +65,8 @@ const renderGeneratePDFButton = (teams: PlayerDef[][]) => {
     const roster: string[][] = [];
     const t1 = teams[0];
     const t2 = teams[1];
-    shuffle(t1);
-    shuffle(t2);
+    sortTeam(t1)
+    sortTeam(t2)
 
     let k = 0;
 
