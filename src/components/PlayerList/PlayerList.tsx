@@ -114,6 +114,10 @@ export default function PlayerList({
     ]);
   };
 
+  const handleSetAllToOut = () => {
+    setPlayers((prev) => prev.map((p) => ({...p, attending: false})))
+  };
+
   const updatePlayer = (playerId: string, change: Partial<PlayerDef>) => {
     setPlayers((prev) =>
       prev.map((p) => (p.id === playerId ? { ...p, ...change } : p)),
@@ -155,6 +159,14 @@ export default function PlayerList({
           onClick={handleGenerateRandomTeams}
         >
           Generate Random Teams
+        </Button>
+        <Button
+          variant="soft"
+          size="sm"
+          sx={{ border: "1px solid gray" }}
+          onClick={handleSetAllToOut}
+        >
+          Set All to Out
         </Button>
       </Stack>
       <List>
