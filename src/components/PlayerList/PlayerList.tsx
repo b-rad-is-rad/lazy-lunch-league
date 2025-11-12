@@ -86,14 +86,48 @@ export default function PlayerList({
           }
         }
       } else {
-        t1 = t1.concat(split);
-        t2 = t2.concat(ranked);
+        let firstAssign: PlayerDef[]
+        let secondAssign: PlayerDef[]
+
+        if (Math.random() < 0.5) {
+          firstAssign = split
+          secondAssign = ranked
+        } else {
+          firstAssign = ranked
+          secondAssign = split
+        }
+
+        t1 = t1.concat(firstAssign);
+        t2 = t2.concat(secondAssign);
       }
 
       if (sorted[j] === undefined) break;
 
       i = j;
     }
+
+    // One team will naturally end up with a higher rank than another
+    // If this gap is greater than 4 points, swap a 4 and a 2.
+    const t1Rank = t1.reduce((sum, p) => sum + (p.rank ?? 0), 0)
+    const t2Rank = t2.reduce((sum, p) => sum + (p.rank ?? 0), 0)
+
+    if (Math.abs(t1Rank - t2Rank) > 4) {
+      // take a 4 from the higher team and swap with a 2 on the lower team
+      if (t1Rank > t2Rank) {
+        const rank4 = t1.findIndex((p) => p.rank === 4)
+        const rank2 = t2.findIndex((p) => p.rank === 2)
+
+        t2.push(t1.splice(rank4,1)[0])
+        t1.push(t2.splice(rank2,1)[0])
+      } else {
+        const rank4 = t2.findIndex((p) => p.rank === 4)
+        const rank2 = t1.findIndex((p) => p.rank === 2)
+
+        t1.push(t2.splice(rank4,1)[0])
+        t2.push(t1.splice(rank2,1)[0])
+      }
+    }
+    
 
     setTeams([t1, t2]);
   };
