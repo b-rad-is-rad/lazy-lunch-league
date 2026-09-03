@@ -1,10 +1,11 @@
 import Input from "@mui/joy/Input";
 import Select from "@mui/joy/Select";
 import Option from "@mui/joy/Option";
-import Switch from "@mui/joy/Switch";
-import { IconButton, Stack } from "@mui/joy";
-import CancelIcon from "@mui/icons-material/Cancel";
+import Chip from "@mui/joy/Chip";
+import IconButton from "@mui/joy/IconButton";
+import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import { PlayerDef } from "../PlayerList/PlayerList";
+import styles from "./Player.module.css";
 
 export const ranks = ["5", "4", "3", "2", "1"];
 
@@ -20,17 +21,31 @@ function Player({
   handleRemove: (id: string) => void;
 }) {
   return (
-    <Stack
-      direction="row"
-      spacing={1}
-      sx={{
-        width: 380,
-        position: "relative",
-      }}
-    >
+    <div className={styles.row}>
+      <Chip
+        size="sm"
+        variant={attending ? "solid" : "outlined"}
+        color={attending ? "success" : "neutral"}
+        onClick={() =>
+          handleChange(id, {
+            attending: !attending,
+          })
+        }
+        sx={{
+          fontFamily: "var(--joy-fontFamily-code)",
+          fontSize: "11px",
+          fontWeight: 700,
+          letterSpacing: "0.04em",
+          justifyContent: "center",
+          minWidth: 44,
+          cursor: "pointer",
+        }}
+      >
+        {attending ? "IN" : "OUT"}
+      </Chip>
       <Input
-        placeholder="Player Name"
-        variant="outlined"
+        placeholder="Player name"
+        variant="plain"
         size="sm"
         color="neutral"
         value={name}
@@ -40,16 +55,23 @@ function Player({
           });
         }}
         sx={{
-          flexGrow: 1,
-          maxWidth: 300,
+          fontWeight: 500,
+          "--Input-focusedThickness": "1.5px",
+          "&:hover": { bgcolor: "background.level1" },
         }}
       />
       <Select
         placeholder="Rank"
         name="rank"
-        variant="outlined"
+        variant="plain"
         size="sm"
-        sx={{ minWidth: 100 }}
+        indicator={null}
+        sx={{
+          fontFamily: "var(--joy-fontFamily-code)",
+          fontWeight: 600,
+          justifyContent: "center",
+          "&:hover": { bgcolor: "background.level1" },
+        }}
         value={rank?.toString()}
         onChange={(_, newRank) => {
           handleChange(id, {
@@ -58,38 +80,24 @@ function Player({
         }}
       >
         {ranks.map((r) => (
-          <Option value={r}>{r}</Option>
+          <Option key={r} value={r}>
+            {r}
+          </Option>
         ))}
       </Select>
-      <Switch
-        checked={attending}
-        onChange={(e) => {
-          handleChange(id, {
-            attending: e.target.checked,
-          });
-        }}
-        color={attending ? "primary" : "neutral"}
-        variant={attending ? "solid" : "outlined"}
-        endDecorator={attending ? "In" : "Out"}
-        slotProps={{
-          endDecorator: {
-            sx: {
-              minWidth: 24,
-            },
-          },
-        }}
-      />
       <IconButton
         size="sm"
         color="danger"
         variant="plain"
+        className={styles.removeBtn}
         onClick={() => {
           handleRemove(id);
         }}
+        sx={{ minHeight: 32, minWidth: 32 }}
       >
-        <CancelIcon />
+        <CloseRoundedIcon fontSize="small" />
       </IconButton>
-    </Stack>
+    </div>
   );
 }
 

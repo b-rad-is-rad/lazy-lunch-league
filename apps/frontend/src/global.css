@@ -1,0 +1,34 @@
+:root {
+  color-scheme: light;
+}
+
+html,
+body {
+  background-color: #f3eee3;
+}
+
+body {
+  margin: 0;
+  background-image: radial-gradient(
+    circle at 1px 1px,
+    rgba(28, 24, 20, 0.05) 1px,
+    transparent 0
+  );
+  background-size: 15px 15px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+#root {
+  min-height: 100dvh;
+}
+
+::selection {
+  background: #eabd5c;
+  color: #1c1814;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}

@@ -1,4 +1,5 @@
-import { CircularProgress } from "@mui/joy";
+import Box from "@mui/joy/Box";
+import CircularProgress from "@mui/joy/CircularProgress";
 import PlayerList, { PlayerDef } from "../PlayerList/PlayerList";
 import { useEffect, useState } from "react";
 import SportsHockeyIcon from "@mui/icons-material/SportsHockey";
@@ -75,9 +76,20 @@ export const RosterPanel = ({
   }, [debouncedPlayers]);
 
   return loading ? (
-    <CircularProgress color="primary">
-      <SportsHockeyIcon color="inherit" />
-    </CircularProgress>
+    <Box
+      sx={{
+        width: "100%",
+        maxWidth: { xs: "100%", md: 360 },
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        py: 6,
+      }}
+    >
+      <CircularProgress color="primary">
+        <SportsHockeyIcon color="inherit" />
+      </CircularProgress>
+    </Box>
   ) : (
     <PlayerList players={players} setPlayers={setPlayers} setTeams={setTeams} />
   );

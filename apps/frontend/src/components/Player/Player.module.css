@@ -1,9 +1,31 @@
-.cancelBtn {
-  position: absolute;
-  right: -12;
-  top: -10;
+.row {
+  display: grid;
+  grid-template-columns: 46px 1fr 44px 32px;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 4px 6px;
+  border-radius: var(--joy-radius-sm);
+  transition: background-color 120ms ease;
 }
 
-.cancelBtn:hover {
-  background-color: "red";
+.row:hover {
+  background-color: var(--joy-palette-neutral-100);
+}
+
+.removeBtn {
+  opacity: 0;
+  transition: opacity 120ms ease;
+}
+
+.row:hover .removeBtn,
+.row:focus-within .removeBtn {
+  opacity: 1;
+}
+
+/* Utility buttons should always be reachable by touch, no hover to rely on. */
+@media (hover: none) {
+  .removeBtn {
+    opacity: 0.55;
+  }
 }
