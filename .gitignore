@@ -24,3 +24,12 @@ dist-ssr
 *.sw?
 
 *storybook.log
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+*.tfvars
+*.tfvars.json

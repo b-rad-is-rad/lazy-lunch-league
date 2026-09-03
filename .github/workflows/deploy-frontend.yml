@@ -1,0 +1,35 @@
+name: Deploy Frontend
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "apps/frontend/**"
+  workflow_dispatch: {}
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - run: yarn install --frozen-lockfile
+
+      - run: yarn workspace lazy-lunch-leaguer build
+
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::615292856538:role/gh-actions-lazy-lunch-league-frontend-deploy
+          aws-region: us-west-1
+
+      - run: aws s3 sync apps/frontend/dist s3://lazy-lunch-league --delete
+
+      - run: aws cloudfront create-invalidation --distribution-id EENRWPGBYQGUS --paths "/*"
