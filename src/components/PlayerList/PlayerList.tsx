@@ -1,4 +1,6 @@
+import { useRef } from "react";
 import { Button, List, ListItem, Sheet, Stack, Typography } from "@mui/joy";
+import UploadFileIcon from "@mui/icons-material/UploadFile";
 import { v4 as uuidv4 } from "uuid";
 import Player from "../Player/Player";
 
@@ -20,6 +22,14 @@ export const shuffle = (arr: any) => {
 };
 
 export const isOdd = (n: number) => n % 2 !== 0;
+
+// Reads the first column of each row, skipping a "Name" header and blank lines.
+const parseAttendanceCsv = (text: string): string[] => {
+  return text
+    .split(/\r?\n/)
+    .map((line) => line.split(",")[0]?.trim().replace(/^"|"$/g, ""))
+    .filter((name): name is string => !!name && name.toLowerCase() !== "name");
+};
 
 export interface PlayerDef {
   id: string;
@@ -152,6 +162,46 @@ export default function PlayerList({
     setPlayers((prev) => prev.map((p) => ({...p, attending: false})))
   };
 
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleImportAttendanceCsv = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+
+    const names = parseAttendanceCsv(await file.text());
+
+    setPlayers((prev) => {
+      const updated = prev.map((p) => {
+        const isAttending = names.some(
+          (n) => n.toLowerCase() === p.name.trim().toLowerCase(),
+        );
+        return isAttending ? { ...p, attending: true } : p;
+      });
+
+      const knownNames = new Set(
+        updated.map((p) => p.name.trim().toLowerCase()),
+      );
+      const newPlayers: PlayerDef[] = [];
+
+      for (const name of names) {
+        const key = name.toLowerCase();
+        if (knownNames.has(key)) continue;
+        knownNames.add(key);
+        newPlayers.push({
+          id: uuidv4(),
+          name,
+          rank: 3,
+          attending: true,
+        });
+      }
+
+      return [...updated, ...newPlayers];
+    });
+  };
+
   const updatePlayer = (playerId: string, change: Partial<PlayerDef>) => {
     setPlayers((prev) =>
       prev.map((p) => (p.id === playerId ? { ...p, ...change } : p)),
@@ -202,6 +252,22 @@ export default function PlayerList({
         >
           Set All to Out
         </Button>
+        <Button
+          variant="soft"
+          size="sm"
+          sx={{ border: "1px solid gray" }}
+          startDecorator={<UploadFileIcon />}
+          onClick={() => fileInputRef.current?.click()}
+        >
+          Import Attendance CSV
+        </Button>
+        <input
+          type="file"
+          accept=".csv"
+          ref={fileInputRef}
+          style={{ display: "none" }}
+          onChange={handleImportAttendanceCsv}
+        />
       </Stack>
       <List>
         {players.map((player) => (
