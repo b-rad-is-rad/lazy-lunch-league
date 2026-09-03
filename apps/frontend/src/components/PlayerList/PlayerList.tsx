@@ -1,6 +1,17 @@
 import { useRef } from "react";
-import { Button, List, ListItem, Sheet, Stack, Typography } from "@mui/joy";
+import Sheet from "@mui/joy/Sheet";
+import Stack from "@mui/joy/Stack";
+import Typography from "@mui/joy/Typography";
+import Button from "@mui/joy/Button";
+import IconButton from "@mui/joy/IconButton";
+import Tooltip from "@mui/joy/Tooltip";
+import Divider from "@mui/joy/Divider";
+import List from "@mui/joy/List";
+import ListItem from "@mui/joy/ListItem";
+import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
+import RestartAltIcon from "@mui/icons-material/RestartAlt";
+import ShuffleRoundedIcon from "@mui/icons-material/ShuffleRounded";
 import { v4 as uuidv4 } from "uuid";
 import Player from "../Player/Player";
 
@@ -137,7 +148,7 @@ export default function PlayerList({
         t2.push(t1.splice(rank2,1)[0])
       }
     }
-    
+
 
     setTeams([t1, t2]);
   };
@@ -208,59 +219,85 @@ export default function PlayerList({
     );
   };
 
+  const attendingCount = players.filter((p) => p.attending).length;
+
   return (
     <Sheet
       variant="outlined"
       sx={{
         display: "flex",
         flexDirection: "column",
-        maxWidth: 375,
-        alignItems: "center",
+        width: "100%",
+        maxWidth: { xs: "100%", md: 360 },
         borderRadius: "md",
-        p: 2,
-        height: "100%",
-        borderColor: "primary.300",
-        boxShadow: "sm",
+        borderColor: "neutral.700",
+        bgcolor: "background.surface",
+        overflow: "hidden",
       }}
     >
-      <Typography sx={{ mb: 1 }}>
-        Players Attending: {players.filter((p) => p.attending).length}
-      </Typography>
-      <Stack direction="row" spacing={2} sx={{ alignItems: "center" }}>
-        <Button
-          variant="soft"
-          size="sm"
-          sx={{ border: "1px solid gray" }}
-          onClick={handleAddPlayer}
+      <Stack
+        direction="row"
+        alignItems="baseline"
+        justifyContent="space-between"
+        sx={{ px: 2, pt: 1.5, pb: 1 }}
+      >
+        <Typography
+          sx={{
+            fontFamily: "var(--joy-fontFamily-display)",
+            fontWeight: 700,
+            fontSize: 18,
+            letterSpacing: "0.06em",
+            textTransform: "uppercase",
+            color: "neutral.50",
+          }}
         >
-          Add Player
-        </Button>
-        <Button
-          variant="soft"
-          color="warning"
-          size="sm"
-          sx={{ border: "1px solid gray" }}
-          onClick={handleGenerateRandomTeams}
+          Roster
+        </Typography>
+        <Typography
+          sx={{
+            fontFamily: "var(--joy-fontFamily-code)",
+            fontSize: 12,
+            color: "neutral.300",
+          }}
         >
-          Generate Random Teams
-        </Button>
-        <Button
-          variant="soft"
-          size="sm"
-          sx={{ border: "1px solid gray" }}
-          onClick={handleSetAllToOut}
-        >
-          Set All to Out
-        </Button>
-        <Button
-          variant="soft"
-          size="sm"
-          sx={{ border: "1px solid gray" }}
-          startDecorator={<UploadFileIcon />}
-          onClick={() => fileInputRef.current?.click()}
-        >
-          Import Attendance CSV
-        </Button>
+          {attendingCount}/{players.length} IN
+        </Typography>
+      </Stack>
+
+      <Stack direction="row" spacing={0.5} sx={{ px: 1.5, pb: 1 }}>
+        <Tooltip title="Add player" size="sm" variant="outlined">
+          <IconButton
+            size="sm"
+            variant="soft"
+            color="neutral"
+            onClick={handleAddPlayer}
+            sx={{ minHeight: 36, minWidth: 36 }}
+          >
+            <PersonAddAlt1Icon fontSize="small" />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="Import attendance CSV" size="sm" variant="outlined">
+          <IconButton
+            size="sm"
+            variant="soft"
+            color="neutral"
+            onClick={() => fileInputRef.current?.click()}
+            sx={{ minHeight: 36, minWidth: 36 }}
+          >
+            <UploadFileIcon fontSize="small" />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="Set all to out" size="sm" variant="outlined">
+          <IconButton
+            size="sm"
+            variant="soft"
+            color="neutral"
+            onClick={handleSetAllToOut}
+            sx={{ minHeight: 36, minWidth: 36 }}
+          >
+            <RestartAltIcon fontSize="small" />
+          </IconButton>
+        </Tooltip>
         <input
           type="file"
           accept=".csv"
@@ -269,15 +306,12 @@ export default function PlayerList({
           onChange={handleImportAttendanceCsv}
         />
       </Stack>
-      <List>
+
+      <Divider />
+
+      <List size="sm" sx={{ maxHeight: { xs: "none", md: 420 }, overflowY: "auto", py: 0.5, px: 0.5 }}>
         {players.map((player) => (
-          <ListItem
-            key={player.id}
-            sx={{
-              display: "flex",
-              alignItems: "center",
-            }}
-          >
+          <ListItem key={player.id} sx={{ p: 0 }}>
             <Player
               {...player}
               handleChange={updatePlayer}
@@ -285,7 +319,39 @@ export default function PlayerList({
             />
           </ListItem>
         ))}
+        {players.length === 0 && (
+          <Typography
+            level="body-sm"
+            sx={{ textAlign: "center", color: "neutral.400", py: 3 }}
+          >
+            No players yet — add one or import a CSV.
+          </Typography>
+        )}
       </List>
+
+      <Divider />
+
+      <Button
+        size="md"
+        color="primary"
+        variant="solid"
+        onClick={handleGenerateRandomTeams}
+        startDecorator={<ShuffleRoundedIcon />}
+        sx={{
+          m: 1.5,
+          fontFamily: "var(--joy-fontFamily-display)",
+          fontWeight: 700,
+          fontSize: 16,
+          letterSpacing: "0.04em",
+          textTransform: "uppercase",
+          boxShadow: "0 0 22px rgba(242, 149, 26, 0.35)",
+          "&:hover": {
+            boxShadow: "0 0 30px rgba(255, 167, 36, 0.55)",
+          },
+        }}
+      >
+        Generate Teams
+      </Button>
     </Sheet>
   );
 }
