@@ -1,0 +1,21 @@
+{
+  "name": "lazy-lunch-leaguer-lambda",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "prebuild": "rm -rf dist",
+    "build": "esbuild src/index.ts --bundle --minify --sourcemap --platform=node --target=es2020 --outfile=dist/index.js",
+    "postbuild": "cd dist && zip -r index.zip index.js*"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.806.0",
+    "@aws-sdk/lib-dynamodb": "^3.806.0"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.149",
+    "esbuild": "^0.25.4",
+    "typescript": "~5.8.3",
+    "vite": "^6.3.5"
+  }
+}
