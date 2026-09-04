@@ -43,6 +43,9 @@ export default function MatchupOverlay({
     >
       <Box
         className="popIn"
+        role="dialog"
+        // No visible title any more, so name the dialog for screen readers.
+        aria-label="Today's matchup"
         sx={{
           outline: "none",
           mt: { xs: 2, sm: "7vh" },
@@ -58,31 +61,6 @@ export default function MatchupOverlay({
           boxShadow: "0 24px 60px rgba(0,0,0,0.2)",
         }}
       >
-        <Stack
-          direction="row"
-          alignItems="flex-start"
-          justifyContent="space-between"
-          sx={{ px: { xs: 2.5, sm: 4 }, pt: { xs: 2.5, sm: 3.5 }, pb: 2 }}
-        >
-          <Box>
-            <Typography sx={{ fontSize: { xs: 24, sm: 28 }, fontWeight: 800, lineHeight: 1.15 }}>
-              Today's matchup
-            </Typography>
-            <Typography sx={{ fontSize: 14, color: "text.tertiary", mt: 0.5 }}>
-              {gap === 0 ? "Dead even on points" : `${gap} point spread`}
-            </Typography>
-          </Box>
-          <IconButton
-            size="sm"
-            variant="plain"
-            color="neutral"
-            onClick={onClose}
-            aria-label="Close matchup"
-          >
-            <CloseRoundedIcon />
-          </IconButton>
-        </Stack>
-
         {/* Actions sit above the teams so exporting is the first thing in
             reach once the draw appears. */}
         <Stack
@@ -93,6 +71,7 @@ export default function MatchupOverlay({
           useFlexGap
           sx={{
             px: { xs: 2.5, sm: 4 },
+            pt: { xs: 2.5, sm: 3 },
             pb: 2.5,
             borderBottom: "1px solid",
             borderColor: "divider",
@@ -109,7 +88,12 @@ export default function MatchupOverlay({
             Reshuffle
           </Button>
 
-          <Stack direction="row" spacing={1} sx={{ flexGrow: { xs: 1, sm: 0 } }}>
+          <Stack
+            direction="row"
+            spacing={1}
+            alignItems="center"
+            sx={{ flexGrow: { xs: 1, sm: 0 } }}
+          >
             <Button
               variant="outlined"
               color="neutral"
@@ -126,10 +110,23 @@ export default function MatchupOverlay({
             >
               Download CSV
             </Button>
+            <IconButton
+              size="sm"
+              variant="plain"
+              color="neutral"
+              onClick={onClose}
+              aria-label="Close matchup"
+              sx={{ flexShrink: 0 }}
+            >
+              <CloseRoundedIcon />
+            </IconButton>
           </Stack>
         </Stack>
 
-        <Box sx={{ px: { xs: 2.5, sm: 4 }, pt: 2.5, pb: { xs: 2.5, sm: 3.5 } }}>
+        <Box sx={{ px: { xs: 2.5, sm: 4 }, pt: 2, pb: { xs: 2.5, sm: 3.5 } }}>
+          <Typography sx={{ fontSize: 13.5, color: "text.tertiary", mb: 1.5 }}>
+            {gap === 0 ? "Dead even on points" : `${gap} point spread`}
+          </Typography>
           <TeamsPanel darkTeam={teams[0] ?? []} lightTeam={teams[1] ?? []} />
         </Box>
       </Box>
