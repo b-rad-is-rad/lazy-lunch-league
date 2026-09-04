@@ -3,6 +3,7 @@ import Button from "@mui/joy/Button";
 import Divider from "@mui/joy/Divider";
 import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
+import DoNotDisturbAltRoundedIcon from "@mui/icons-material/DoNotDisturbAltRounded";
 import { PlayerDef, RANKS } from "../../types";
 
 const Stat = ({ label, value }: { label: string; value: string }) => (
@@ -19,11 +20,9 @@ const Stat = ({ label, value }: { label: string; value: string }) => (
 /** Live read-out of the roster: who's in, and how the ranks are distributed. */
 export default function SummaryRail({
   players,
-  onImport,
   onMarkAllOut,
 }: {
   players: PlayerDef[];
-  onImport: () => void;
   onMarkAllOut: () => void;
 }) {
   const attending = players.filter((p) => p.attending);
@@ -55,8 +54,7 @@ export default function SummaryRail({
       </Typography>
 
       <Stack spacing={1.25}>
-        <Stat label="Playing" value={`${attending.length}`} />
-        <Stat label="On the bench" value={`${players.length - attending.length}`} />
+        <Stat label="Skating" value={`${attending.length}`} />
         <Stat
           label="Teams of"
           value={
@@ -133,26 +131,17 @@ export default function SummaryRail({
 
       <Divider sx={{ my: 2.5 }} />
 
-      <Stack spacing={1}>
-        <Button
-          variant="outlined"
-          color="neutral"
-          size="sm"
-          onClick={onImport}
-          sx={{ bgcolor: "background.surface", fontWeight: 600, justifyContent: "flex-start" }}
-        >
-          Import attendance CSV
-        </Button>
-        <Button
-          variant="plain"
-          color="neutral"
-          size="sm"
-          onClick={onMarkAllOut}
-          sx={{ fontWeight: 500, color: "text.tertiary", justifyContent: "flex-start" }}
-        >
-          Mark everyone out
-        </Button>
-      </Stack>
+      <Button
+        variant="outlined"
+        color="neutral"
+        size="sm"
+        fullWidth
+        startDecorator={<DoNotDisturbAltRoundedIcon sx={{ fontSize: 17 }} />}
+        onClick={onMarkAllOut}
+        sx={{ bgcolor: "background.surface", fontWeight: 600 }}
+      >
+        Mark everyone out
+      </Button>
     </Box>
   );
 }

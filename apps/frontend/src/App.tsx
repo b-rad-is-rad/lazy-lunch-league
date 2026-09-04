@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import Box from "@mui/joy/Box";
 import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
-import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import Workspace from "./components/Workspace/Workspace";
 import { DAYS, Day, PlayerDef } from "./types";
 
@@ -116,54 +115,6 @@ function App() {
             </Stack>
           </Stack>
 
-          <Stack
-            component="button"
-            type="button"
-            onClick={() => setPaletteOpen(true)}
-            direction="row"
-            alignItems="center"
-            spacing={1}
-            aria-label="Open command palette"
-            sx={{
-              border: "1px solid",
-              borderColor: "neutral.200",
-              bgcolor: "neutral.50",
-              borderRadius: "999px",
-              cursor: "pointer",
-              fontFamily: "inherit",
-              px: { xs: 1, sm: 1.5 },
-              py: 0.75,
-              flexShrink: 0,
-              transition: "background-color 140ms ease",
-              "&:hover": { bgcolor: "neutral.100" },
-            }}
-          >
-            <SearchRoundedIcon sx={{ fontSize: 17, color: "text.tertiary" }} />
-            <Typography
-              sx={{
-                display: { xs: "none", sm: "block" },
-                fontSize: 13.5,
-                color: "text.tertiary",
-              }}
-            >
-              Actions
-            </Typography>
-            <Box
-              sx={{
-                display: { xs: "none", sm: "block" },
-                fontFamily: "var(--joy-fontFamily-code)",
-                fontSize: 11,
-                color: "text.tertiary",
-                border: "1px solid",
-                borderColor: "neutral.200",
-                bgcolor: "background.surface",
-                borderRadius: "xs",
-                px: 0.6,
-              }}
-            >
-              ⌘K
-            </Box>
-          </Stack>
         </Stack>
       </Box>
 

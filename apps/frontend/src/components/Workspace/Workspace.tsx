@@ -1,13 +1,12 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Box from "@mui/joy/Box";
 import Button from "@mui/joy/Button";
 import CircularProgress from "@mui/joy/CircularProgress";
-import Input from "@mui/joy/Input";
 import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
-import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
-import BoltRoundedIcon from "@mui/icons-material/BoltRounded";
+import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
+import SportsHockeyIcon from "@mui/icons-material/SportsHockey";
 import { v4 as uuidv4 } from "uuid";
 import RosterTable from "../RosterTable/RosterTable";
 import BulkBar from "../BulkBar/BulkBar";
@@ -37,7 +36,6 @@ export default function Workspace({
   setPaletteOpen: (open: boolean) => void;
 }) {
   const loading = useRoster(day, players, setPlayers);
-  const [query, setQuery] = useState("");
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [teams, setTeams] = useState<PlayerDef[][]>([[], []]);
   const [matchupOpen, setMatchupOpen] = useState(false);
@@ -45,12 +43,7 @@ export default function Workspace({
 
   const attending = players.filter((p) => p.attending).length;
 
-  const visible = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    return q ? players.filter((p) => p.name.toLowerCase().includes(q)) : players;
-  }, [players, query]);
-
-  // Selecting a row then filtering it away would strand it in the selection.
+  // Removing a player would otherwise strand their id in the selection.
   useEffect(() => {
     setSelected((prev) => {
       const live = new Set(players.map((p) => p.id));
@@ -93,9 +86,9 @@ export default function Workspace({
 
   const toggleAll = () =>
     setSelected((prev) =>
-      visible.every((p) => prev.has(p.id))
+      players.length > 0 && players.every((p) => prev.has(p.id))
         ? new Set()
-        : new Set(visible.map((p) => p.id)),
+        : new Set(players.map((p) => p.id)),
     );
 
   const drawTeams = () => {
@@ -144,7 +137,7 @@ export default function Workspace({
     { id: "allout", label: "Mark everyone out", group: "Roster", run: markAllOut },
     {
       id: "draw",
-      label: "Draw teams",
+      label: "Create teams",
       group: "Teams",
       hint: "↵",
       disabled: attending < 2,
@@ -208,42 +201,51 @@ export default function Workspace({
             <Box component="span" sx={{ fontFamily: "var(--joy-fontFamily-code)" }}>
               {players.length}
             </Box>{" "}
-            playing
+            skating
           </Typography>
         </Box>
 
-        <Stack direction="row" spacing={1.25} alignItems="center">
-          <Input
-            placeholder="Filter players"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            startDecorator={<SearchRoundedIcon sx={{ fontSize: 18 }} />}
+        {/* Ordered the way the session runs: import, tweak, create. */}
+        <Stack
+          direction="row"
+          spacing={1.25}
+          alignItems="center"
+          useFlexGap
+          sx={{ flexWrap: "wrap" }}
+        >
+          <Button
+            variant="outlined"
+            color="primary"
+            startDecorator={<FileUploadOutlinedIcon sx={{ fontSize: 19 }} />}
+            onClick={() => fileInputRef.current?.click()}
             sx={{
-              flex: { xs: 1, md: "initial" },
-              width: { md: 190 },
-              bgcolor: "neutral.100",
-              borderColor: "transparent",
-              "&:hover": { bgcolor: "neutral.200" },
+              whiteSpace: "nowrap",
+              fontWeight: 700,
+              bgcolor: "primary.50",
+              borderColor: "primary.200",
+              "&:hover": { bgcolor: "primary.100" },
             }}
-          />
+          >
+            Import CSV
+          </Button>
           <Button
             variant="outlined"
             color="neutral"
+            startDecorator={<AddRoundedIcon sx={{ fontSize: 19 }} />}
             onClick={addPlayer}
-            aria-label="Add player"
-            sx={{ px: 1.5, minWidth: 0, fontWeight: 600 }}
+            sx={{ whiteSpace: "nowrap", fontWeight: 600 }}
           >
-            <AddRoundedIcon sx={{ fontSize: 19 }} />
+            Add player
           </Button>
           <Button
             variant="solid"
             color="primary"
             disabled={attending < 2}
-            startDecorator={<BoltRoundedIcon sx={{ fontSize: 19 }} />}
+            startDecorator={<SportsHockeyIcon sx={{ fontSize: 19 }} />}
             onClick={drawTeams}
-            sx={{ whiteSpace: "nowrap", fontWeight: 700 }}
+            sx={{ whiteSpace: "nowrap", fontWeight: 700, flexGrow: { xs: 1, sm: 0 } }}
           >
-            Draw teams
+            Create teams
           </Button>
         </Stack>
       </Stack>
@@ -259,24 +261,16 @@ export default function Workspace({
       <Stack direction={{ xs: "column", lg: "row" }} spacing={{ xs: 3, lg: 5 }} alignItems="flex-start">
         <Box sx={{ flex: 1, minWidth: 0, width: "100%", pb: selected.size ? 8 : 0 }}>
           <RosterTable
-            players={visible}
+            players={players}
             selected={selected}
             onToggleSelect={toggleSelect}
             onToggleAll={toggleAll}
             onChange={updatePlayer}
-            emptyMessage={
-              players.length === 0
-                ? "No players yet — import a CSV or add someone."
-                : `No players match “${query}”.`
-            }
+            emptyMessage="No players yet — import a CSV or add someone."
           />
         </Box>
 
-        <SummaryRail
-          players={players}
-          onImport={() => fileInputRef.current?.click()}
-          onMarkAllOut={markAllOut}
-        />
+        <SummaryRail players={players} onMarkAllOut={markAllOut} />
       </Stack>
 
       <BulkBar
