@@ -2,7 +2,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { CssVarsProvider } from "@mui/joy/styles";
 import TeamsPanel from "./TeamsPanel";
-import { PlayerDef } from "../PlayerList/PlayerList";
+import { PlayerDef } from "../../types";
 
 // Mock player data with ranks 1-7
 const mockPlayers = {
