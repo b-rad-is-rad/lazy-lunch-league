@@ -8,6 +8,21 @@ resource "aws_iam_openid_connect_provider" "github" {
   thumbprint_list = [data.tls_certificate.github.certificates[0].sha1_fingerprint]
 }
 
+locals {
+  repo_owner = split("/", var.github_repo)[0]
+  repo_name  = split("/", var.github_repo)[1]
+
+  # GitHub issues the OIDC subject with immutable numeric ids appended to the
+  # owner and repo — "repo:owner@1234/name@5678:ref:..." — rather than the
+  # bare "repo:owner/name:ref:..." most examples show. Accept either shape so
+  # this keeps working whichever form the token carries, while still pinning
+  # to pushes on main in this repo.
+  deploy_subjects = [
+    "repo:${var.github_repo}:ref:refs/heads/main",
+    "repo:${local.repo_owner}@*/${local.repo_name}@*:ref:refs/heads/main",
+  ]
+}
+
 resource "aws_iam_role" "github_deploy" {
   name = "gh-actions-lazy-lunch-league-frontend-deploy"
 
@@ -23,7 +38,7 @@ resource "aws_iam_role" "github_deploy" {
             "token.actions.githubusercontent.com:aud" = "sts.amazonaws.com"
           }
           StringLike = {
-            "token.actions.githubusercontent.com:sub" = "repo:${var.github_repo}:ref:refs/heads/main"
+            "token.actions.githubusercontent.com:sub" = local.deploy_subjects
           }
         }
       }
