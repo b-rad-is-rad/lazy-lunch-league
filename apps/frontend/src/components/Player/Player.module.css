@@ -1,9 +1,0 @@
-.cancelBtn {
-  position: absolute;
-  right: -12;
-  top: -10;
-}
-
-.cancelBtn:hover {
-  background-color: "red";
-}

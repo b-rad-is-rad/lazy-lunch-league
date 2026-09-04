@@ -1,0 +1,35 @@
+.row {
+  padding: 9px 8px 9px 8px;
+  border-bottom: 1px solid var(--joy-palette-divider);
+  transition:
+    background-color 130ms ease,
+    box-shadow 130ms ease;
+}
+
+.row:last-of-type {
+  border-bottom: none;
+}
+
+.row:hover {
+  background-color: var(--joy-palette-neutral-50);
+}
+
+.selected {
+  background-color: var(--joy-palette-primary-50);
+  box-shadow: inset 2px 0 0 var(--joy-palette-primary-500);
+}
+
+.selected:hover {
+  background-color: var(--joy-palette-primary-100);
+}
+
+.out .nameCell,
+.out {
+  color: var(--joy-palette-text-tertiary);
+}
+
+@media (max-width: 599px) {
+  .row {
+    padding: 9px 2px;
+  }
+}
