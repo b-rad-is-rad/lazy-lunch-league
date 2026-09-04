@@ -13,6 +13,7 @@ import BulkBar from "../BulkBar/BulkBar";
 import SummaryRail from "../SummaryRail/SummaryRail";
 import MatchupOverlay from "../MatchupOverlay/MatchupOverlay";
 import CommandPalette, { Command } from "../CommandPalette/CommandPalette";
+import { useColorMode } from "../../context/colorMode";
 import { Day, DAYS, PlayerDef } from "../../types";
 import { generateTeams } from "../../lib/teams";
 import { downloadRosterCsv, downloadRosterPdf, parseAttendanceCsv } from "../../lib/exports";
@@ -36,6 +37,7 @@ export default function Workspace({
   setPaletteOpen: (open: boolean) => void;
 }) {
   const loading = useRoster(day, players, setPlayers);
+  const { isDark, toggle } = useColorMode();
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [teams, setTeams] = useState<PlayerDef[][]>([[], []]);
   const [matchupOpen, setMatchupOpen] = useState(false);
@@ -170,6 +172,12 @@ export default function Workspace({
       group: "Day",
       run: () => onSwitchDay(d),
     })),
+    {
+      id: "theme",
+      label: isDark ? "Switch to light mode" : "Switch to dark mode",
+      group: "Appearance",
+      run: toggle,
+    },
   ];
 
   if (loading) {

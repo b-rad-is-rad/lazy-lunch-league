@@ -167,6 +167,7 @@ export default function RosterTable({
                     bgcolor: "transparent",
                     fontSize: 15,
                     fontWeight: 500,
+                    color: "text.primary",
                     "&::before": { display: "none" },
                     "&:hover, &:focus-within": { bgcolor: "neutral.100" },
                   }}
@@ -188,6 +189,7 @@ export default function RosterTable({
                   fontFamily: "var(--joy-fontFamily-code)",
                   fontSize: 13,
                   fontWeight: 500,
+                  color: "text.primary",
                   "&:hover": { bgcolor: "neutral.200" },
                 }}
               >

@@ -1,17 +1,22 @@
 import { useEffect, useState } from "react";
 import Box from "@mui/joy/Box";
+import IconButton from "@mui/joy/IconButton";
 import Stack from "@mui/joy/Stack";
+import Tooltip from "@mui/joy/Tooltip";
 import Typography from "@mui/joy/Typography";
+import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
+import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
 import Workspace from "./components/Workspace/Workspace";
+import { useColorMode } from "./context/colorMode";
 import { DAYS, Day, PlayerDef } from "./types";
 
 const label = (d: string) => d[0].toUpperCase() + d.slice(1);
 
 function App() {
-  const [day, setDay] = useState<Day>("tuesday");
+  const { isDark, toggle } = useColorMode();
+  const [day, setDay] = useState<Day>("thursday");
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [rosters, setRosters] = useState<Record<Day, PlayerDef[]>>({
-    tuesday: [],
     thursday: [],
     friday: [],
   });
@@ -43,8 +48,7 @@ function App() {
         sx={{
           borderBottom: "1px solid",
           borderColor: "divider",
-          bgcolor: "rgba(255,255,255,0.86)",
-          backdropFilter: "blur(8px)",
+          bgcolor: "background.surface",
           position: "sticky",
           top: 0,
           zIndex: 20,
@@ -115,6 +119,27 @@ function App() {
             </Stack>
           </Stack>
 
+          <Tooltip
+            title={isDark ? "Switch to light mode" : "Switch to dark mode"}
+            size="sm"
+            variant="outlined"
+          >
+            <IconButton
+              variant="outlined"
+              color="neutral"
+              size="sm"
+              onClick={toggle}
+              aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+              aria-pressed={isDark}
+              sx={{ flexShrink: 0, borderRadius: "999px" }}
+            >
+              {isDark ? (
+                <LightModeOutlinedIcon sx={{ fontSize: 18 }} />
+              ) : (
+                <DarkModeOutlinedIcon sx={{ fontSize: 18 }} />
+              )}
+            </IconButton>
+          </Tooltip>
         </Stack>
       </Box>
 

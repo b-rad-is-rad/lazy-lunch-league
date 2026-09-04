@@ -76,12 +76,16 @@ export default function BulkBar({
         sx={{
           pointerEvents: "auto",
           maxWidth: "100%",
-          bgcolor: "neutral.900",
+          // Deliberately dark in both schemes: it floats over the page, and a
+          // fixed ink keeps its white labels and red Remove legible either
+          // way. The hairline separates it from a dark background.
+          bgcolor: "#1A1D22",
+          border: "1px solid rgba(255,255,255,0.14)",
           borderRadius: "999px",
           pl: 2,
           pr: 0.75,
           py: 0.75,
-          boxShadow: "0 8px 30px rgba(0,0,0,0.28)",
+          boxShadow: "0 8px 30px rgba(0,0,0,0.4)",
         }}
       >
         <Typography
