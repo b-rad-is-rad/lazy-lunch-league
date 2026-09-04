@@ -22,15 +22,15 @@ const Team = ({
   swatch: string;
   dark?: boolean;
 }) => (
-  // The dark side sits on a grey panel so the two jerseys are legible at a
-  // glance rather than only via the label.
+  // Both sides stay white; the jersey is carried by the outline instead —
+  // near-black for dark, light grey for light.
   <Box
     sx={{
       flex: 1,
       minWidth: 0,
-      bgcolor: dark ? "neutral.200" : "background.surface",
-      border: "1px solid",
-      borderColor: dark ? "neutral.300" : "neutral.200",
+      bgcolor: "background.surface",
+      border: "2px solid",
+      borderColor: dark ? "neutral.900" : "neutral.300",
       borderRadius: "lg",
       p: { xs: 1.75, sm: 2.25 },
     }}
@@ -39,7 +39,12 @@ const Team = ({
       direction="row"
       alignItems="center"
       justifyContent="space-between"
-      sx={{ pb: 1.25, mb: 0.5, borderBottom: "2px solid", borderColor: "neutral.900" }}
+      sx={{
+        pb: 1.25,
+        mb: 0.5,
+        borderBottom: "2px solid",
+        borderColor: dark ? "neutral.900" : "neutral.300",
+      }}
     >
       <Stack direction="row" alignItems="center" spacing={1.25}>
         <Box
@@ -81,8 +86,7 @@ const Team = ({
             sx={{
               py: 1,
               borderBottom: "1px solid",
-              // The default divider is invisible against the grey panel.
-              borderColor: dark ? "neutral.300" : "divider",
+              borderColor: "divider",
               "&:last-of-type": { borderBottom: "none" },
             }}
           >
