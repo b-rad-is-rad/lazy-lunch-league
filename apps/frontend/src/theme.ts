@@ -1,7 +1,7 @@
 import { extendTheme } from "@mui/joy/styles";
 
 // Workspace theme: white page, hairline rules instead of cards, a graphite
-// ink and a single evergreen accent. Numbers are set in mono so counts and
+// ink and a single violet accent. Numbers are set in mono so counts and
 // ranks line up down the column.
 export const theme = extendTheme({
   fontFamily: {
@@ -20,21 +20,21 @@ export const theme = extendTheme({
     light: {
       palette: {
         primary: {
-          50: "#ECFAF5",
-          100: "#D2F2E7",
-          200: "#A6E3CE",
-          300: "#6FCDAF",
-          400: "#37B08E",
-          500: "#12906F",
-          600: "#0C7359",
-          700: "#0A5B47",
-          800: "#084537",
-          900: "#052D24",
-          solidBg: "#0C7359",
-          solidHoverBg: "#0A5B47",
-          solidActiveBg: "#084537",
-          plainColor: "#0C7359",
-          outlinedColor: "#0C7359",
+          50: "#F6F3FE",
+          100: "#EBE4FD",
+          200: "#D7C9FB",
+          300: "#BCA5F6",
+          400: "#9D7BEF",
+          500: "#7F52E3",
+          600: "#6A3DCB",
+          700: "#5730A6",
+          800: "#422480",
+          900: "#2C1857",
+          solidBg: "#6A3DCB",
+          solidHoverBg: "#5C33B4",
+          solidActiveBg: "#5730A6",
+          plainColor: "#5730A6",
+          outlinedColor: "#5730A6",
         },
         neutral: {
           50: "#FAFAFA",

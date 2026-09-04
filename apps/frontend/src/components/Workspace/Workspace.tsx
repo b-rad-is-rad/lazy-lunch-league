@@ -193,13 +193,18 @@ export default function Workspace({
           <Typography sx={{ fontSize: { xs: 28, sm: 34 }, fontWeight: 800, lineHeight: 1.1 }}>
             {label(day)} roster
           </Typography>
-          <Typography sx={{ fontSize: 14.5, color: "text.tertiary", mt: 0.5 }}>
-            <Box component="span" sx={{ fontFamily: "var(--joy-fontFamily-code)" }}>
+          <Typography
+            sx={{ fontSize: 15.5, fontWeight: 600, color: "text.secondary", mt: 0.5 }}
+          >
+            <Box
+              component="span"
+              sx={{
+                fontFamily: "var(--joy-fontFamily-code)",
+                fontWeight: 700,
+                color: "text.primary",
+              }}
+            >
               {attending}
-            </Box>{" "}
-            of{" "}
-            <Box component="span" sx={{ fontFamily: "var(--joy-fontFamily-code)" }}>
-              {players.length}
             </Box>{" "}
             skating
           </Typography>
@@ -226,7 +231,7 @@ export default function Workspace({
               "&:hover": { bgcolor: "primary.100" },
             }}
           >
-            Import CSV
+            Import attendance CSV
           </Button>
           <Button
             variant="outlined"
