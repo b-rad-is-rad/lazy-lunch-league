@@ -15,12 +15,26 @@ const Team = ({
   team,
   title,
   swatch,
+  dark,
 }: {
   team: PlayerDef[];
   title: string;
   swatch: string;
+  dark?: boolean;
 }) => (
-  <Box sx={{ flex: 1, minWidth: 0 }}>
+  // The dark side sits on a grey panel so the two jerseys are legible at a
+  // glance rather than only via the label.
+  <Box
+    sx={{
+      flex: 1,
+      minWidth: 0,
+      bgcolor: dark ? "neutral.200" : "background.surface",
+      border: "1px solid",
+      borderColor: dark ? "neutral.300" : "neutral.200",
+      borderRadius: "lg",
+      p: { xs: 1.75, sm: 2.25 },
+    }}
+  >
     <Stack
       direction="row"
       alignItems="center"
@@ -67,7 +81,8 @@ const Team = ({
             sx={{
               py: 1,
               borderBottom: "1px solid",
-              borderColor: "divider",
+              // The default divider is invisible against the grey panel.
+              borderColor: dark ? "neutral.300" : "divider",
               "&:last-of-type": { borderBottom: "none" },
             }}
           >
@@ -94,8 +109,12 @@ const TeamPanel: React.FC<TeamPanelProps> = ({
   darkTeam = [],
   lightTeam = [],
 }) => (
-  <Stack direction={{ xs: "column", sm: "row" }} spacing={{ xs: 3, sm: 6 }}>
-    <Team team={darkTeam} title="Dark" swatch="#26292F" />
+  <Stack
+    direction={{ xs: "column", sm: "row" }}
+    spacing={{ xs: 1.5, sm: 2 }}
+    alignItems="stretch"
+  >
+    <Team team={darkTeam} title="Dark" swatch="#26292F" dark />
     <Team team={lightTeam} title="Light" swatch="#FFFFFF" />
   </Stack>
 );

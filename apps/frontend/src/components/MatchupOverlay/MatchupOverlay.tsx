@@ -83,27 +83,24 @@ export default function MatchupOverlay({
           </IconButton>
         </Stack>
 
-        <Box sx={{ px: { xs: 2.5, sm: 4 }, pb: 2 }}>
-          <TeamsPanel darkTeam={teams[0] ?? []} lightTeam={teams[1] ?? []} />
-        </Box>
-
+        {/* Actions sit above the teams so exporting is the first thing in
+            reach once the draw appears. */}
         <Stack
-          direction={{ xs: "column-reverse", sm: "row" }}
-          alignItems={{ xs: "stretch", sm: "center" }}
+          direction="row"
+          alignItems="center"
           justifyContent="space-between"
           spacing={1.25}
+          useFlexGap
           sx={{
             px: { xs: 2.5, sm: 4 },
-            py: 2.5,
-            borderTop: "1px solid",
+            pb: 2.5,
+            borderBottom: "1px solid",
             borderColor: "divider",
-            bgcolor: "neutral.50",
-            borderBottomLeftRadius: "13px",
-            borderBottomRightRadius: "13px",
+            flexWrap: "wrap",
           }}
         >
           <Button
-            variant="plain"
+            variant="outlined"
             color="neutral"
             startDecorator={<AutorenewRoundedIcon sx={{ fontSize: 18 }} />}
             onClick={onReshuffle}
@@ -112,12 +109,12 @@ export default function MatchupOverlay({
             Reshuffle
           </Button>
 
-          <Stack direction={{ xs: "column", sm: "row" }} spacing={1}>
+          <Stack direction="row" spacing={1} sx={{ flexGrow: { xs: 1, sm: 0 } }}>
             <Button
               variant="outlined"
               color="neutral"
               onClick={() => downloadRosterPdf(teams)}
-              sx={{ bgcolor: "background.surface", fontWeight: 600 }}
+              sx={{ fontWeight: 600, flexGrow: { xs: 1, sm: 0 } }}
             >
               PDF
             </Button>
@@ -125,12 +122,16 @@ export default function MatchupOverlay({
               variant="solid"
               color="primary"
               onClick={() => downloadRosterCsv(teams)}
-              sx={{ fontWeight: 600 }}
+              sx={{ fontWeight: 600, whiteSpace: "nowrap", flexGrow: { xs: 1, sm: 0 } }}
             >
               Download CSV
             </Button>
           </Stack>
         </Stack>
+
+        <Box sx={{ px: { xs: 2.5, sm: 4 }, pt: 2.5, pb: { xs: 2.5, sm: 3.5 } }}>
+          <TeamsPanel darkTeam={teams[0] ?? []} lightTeam={teams[1] ?? []} />
+        </Box>
       </Box>
     </Modal>
   );
