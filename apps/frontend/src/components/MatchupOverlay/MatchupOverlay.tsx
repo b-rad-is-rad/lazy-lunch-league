@@ -96,19 +96,19 @@ export default function MatchupOverlay({
           >
             <Button
               variant="outlined"
-              color="neutral"
-              onClick={() => downloadRosterPdf(teams)}
+              color="primary"
+              onClick={() => downloadRosterCsv(teams)}
               sx={{ fontWeight: 600, flexGrow: { xs: 1, sm: 0 } }}
             >
-              PDF
+              CSV
             </Button>
             <Button
               variant="solid"
               color="primary"
-              onClick={() => downloadRosterCsv(teams)}
+              onClick={() => downloadRosterPdf(teams)}
               sx={{ fontWeight: 600, whiteSpace: "nowrap", flexGrow: { xs: 1, sm: 0 } }}
             >
-              Download CSV
+              Download PDF
             </Button>
             <IconButton
               size="sm"
