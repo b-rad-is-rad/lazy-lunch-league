@@ -105,12 +105,15 @@ export default function Workspace({
 
     const names = parseAttendanceCsv(await file.text());
 
+    // The CSV is the whole roster: anyone not listed is marked out, so a
+    // previous import's attendees don't carry over.
     setPlayers((prev) => {
-      const updated = prev.map((p) =>
-        names.some((n) => n.toLowerCase() === p.name.trim().toLowerCase())
-          ? { ...p, attending: true }
-          : p,
-      );
+      const updated = prev.map((p) => ({
+        ...p,
+        attending: names.some(
+          (n) => n.toLowerCase() === p.name.trim().toLowerCase(),
+        ),
+      }));
 
       const known = new Set(updated.map((p) => p.name.trim().toLowerCase()));
       const added: PlayerDef[] = [];
